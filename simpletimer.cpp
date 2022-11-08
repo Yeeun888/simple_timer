@@ -1,101 +1,18 @@
 #include <iostream>
-#include <time.h>
 #include <ctime>
 #include <ratio>
-#include <unistd.h>
 #include <chrono>
 #include <array>
+
+#include <time.h>
+#include <unistd.h>
+
+#include "letters.cpp"
 
 namespace chrono = std::chrono;
 using chrono::system_clock;
 
-namespace Numbers {
-    using std::array;
-
-    array<std::string, 5> zero{
-        "██████",
-        "██  ██",
-        "██  ██",
-        "██  ██",
-        "██████",
-    };
-
-    array<std::string, 5> one{
-        "████  ",
-        "  ██  ",
-        "  ██  ",
-        "  ██  ",
-        "██████",
-    };
-
-    array<std::string, 5> two{
-        "██████",
-        "     █",
-        "██████",
-        "█     ",
-        "██████",
-    };
-
-    array<std::string, 5> three{
-        "██████"
-        "    ██"
-        "██████"
-        "    ██"
-        "██████"
-    };
-
-    array<std::string, 5> four{
-        "██  ██",
-        "██  ██",
-        "██████",
-        "    ██",
-        "    ██",
-    };
-
-    array<std::string, 5> five{
-        "██████",
-        "██    ",
-        "██████",
-        "    ██",
-        "██████",
-    };
-
-    array<std::string, 5> six{
-        "██████",
-        "██    ",
-        "██████",
-        "██  ██",
-        "██████",
-    };
-
-    array<std::string, 5> seven{
-        "██████",
-        "    ██",
-        "    ██",
-        "    ██",
-        "    ██",
-    };
-
-    array<std::string, 5> six{
-        "██████",
-        "██  ██",
-        "██████",
-        "██  ██",
-        "██████",
-    };
-    
-    array<std::string, 5> six{
-        "██████",
-        "██  ██",
-        "██████",
-        "    ██",
-        "██████",
-    };
-};
-
-namespace ExtraCharacters {
-    
-};
+void printTime(int hours, int minutes, int seconds);
 
 void Seconds() {
     chrono::time_point begin = system_clock::now();
@@ -110,15 +27,23 @@ void Seconds() {
         tPresent = system_clock::to_time_t(present);        
 
         if(!(tBegin == tPresent)) {
-            system("clear");
-            std::cout << std::ctime(&tPresent);
-            begin = system_clock::now();
-            usleep(999000);
+            struct tm* timeStruct;
+            timeStruct = gmtime(&tPresent);
+                        
+            printTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec);
+            
+            //Added to prevent high cpu usage
+            tBegin = tPresent;
         }
     }
 }
 
-void printTime() {
+void printTime(int hours, int minutes, int seconds) {
+    std::cout << seconds << '\n';
+    usleep(999000);
+}
+
+void numbersConcat() {
 
 }
 
