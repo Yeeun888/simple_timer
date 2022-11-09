@@ -22,18 +22,18 @@ namespace Numbers {
 
     array<std::string, 5> two{
         "██████",
-        "     █",
+        "    ██",
         "██████",
-        "█     ",
+        "██    ",
         "██████",
     };
 
     array<std::string, 5> three{
-        "██████"
-        "    ██"
-        "██████"
-        "    ██"
-        "██████"
+        "██████",
+        "    ██",
+        "██████",
+        "    ██",
+        "██████",
     };
 
     array<std::string, 5> four{
@@ -86,5 +86,22 @@ namespace Numbers {
 };
 
 namespace ExtraCharacters {
+    using std::array;
     
+    array<std::string, 5> space{
+        "  ",
+        "  ",
+        "  ",
+        "  ",
+        "  ",
+    };
+
+    array<std::string, 5> colon{
+        "  ",
+        "██",
+        "  ",
+        "██",
+        "  ",
+    };
+
 };
