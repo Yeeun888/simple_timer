@@ -4,7 +4,7 @@
 #include <chrono>
 #include <array>
 #include <string>
-#include <cstdarg> //For ellipsis (...) support
+#include <sys/ioctl.h>
 
 #include <time.h>
 #include <unistd.h> //Use of sleep
@@ -114,6 +114,17 @@ namespace PrintFunctions {
 
             std::cout << '\n';
         }      
+    }
+};
+
+namespace Draw {
+    bool detectSize(int width, int height) {
+        struct winsize w;
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+        printf ("lines %d\n", w.ws_row);
+        printf ("columns %d\n", w.ws_col);
+        return 0;  // make sure your main returns int
     }
 };
 
