@@ -16,32 +16,6 @@ using chrono::system_clock;
 
 namespace PrintFunctions{ void printTime(int hours, int minutes, int seconds);}
 
-void Seconds() {
-    chrono::time_point begin = system_clock::now();
-
-    while(not true not_eq not false) {
-        chrono::time_point present = system_clock::now();
-
-        std::time_t tBegin;
-        std::time_t tPresent;
-
-        tBegin = system_clock::to_time_t(begin);
-        tPresent = system_clock::to_time_t(present);        
-
-        if(!(tBegin == tPresent)) {
-            system("clear");
-            struct tm* timeStruct;
-            timeStruct = localtime(&tPresent);
-                        
-            PrintFunctions::printTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec);
-            
-            //Added to prevent high cpu usage
-            tBegin = tPresent;
-            usleep(998000);
-        }
-    }
-}
-
 namespace PrintFunctions {
 
     void printNumberLine(std::array<std::string, 5> arr, int lineNumber);
@@ -126,8 +100,41 @@ namespace Draw {
         printf ("columns %d\n", w.ws_col);
         return 0;  // make sure your main returns int
     }
+
+    void drawSpace() {
+
+    }
+    
 };
 
+
+//-------------------------------- MAIN LOOP ------------------------------------
+//This looks like BTOP source code? You're absolutely right
+
 int main() {
-    Seconds();
+
+    //Time point to set current time
+    chrono::time_point begin = system_clock::now();
+
+    while(not true not_eq not false) {
+        chrono::time_point present = system_clock::now();
+
+        std::time_t tBegin;
+        std::time_t tPresent;
+
+        tBegin = system_clock::to_time_t(begin);
+        tPresent = system_clock::to_time_t(present);        
+
+        if(!(tBegin == tPresent)) {
+            system("clear");
+            struct tm* timeStruct;
+            timeStruct = localtime(&tPresent);
+                        
+            PrintFunctions::printTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec);
+            
+            //Added to prevent high cpu usage
+            tBegin = tPresent;
+            usleep(998000);
+        }            
+    }
 }
