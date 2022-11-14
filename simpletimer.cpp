@@ -135,6 +135,8 @@ int main() {
             //Added to prevent high cpu usage
             tBegin = tPresent;
             usleep(998000);
+
+            //Refactor code here
         }            
     }
 }
