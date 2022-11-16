@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ctime> //Use ot time_t 
+#include <cstring>
 #include <ratio>
 #include <chrono>
 #include <array>
@@ -14,9 +15,7 @@
 namespace chrono = std::chrono;
 using chrono::system_clock;
 
-namespace PrintFunctions{ void printTime(int hours, int minutes, int seconds);}
-
-namespace PrintFunctions {
+namespace NumberPrintFunctions {
 
     template<int num> void printNumberLine(std::array<std::string, num> arr, int lineNumber) {
         std::cout << arr[lineNumber];
@@ -96,47 +95,67 @@ namespace Draw {
         struct winsize w;
         ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
-        printf ("lines %d\n", w.ws_row);
-        printf ("columns %d\n", w.ws_col);
         return 0;  // make sure your main returns int
     }
 
-    void drawSpace() {
+    //Draw space before drawing time. 
+    //Space calculates empty space for text other than the time
+    void drawSpace(int terminalWidth, int terminalHeight) {
 
     }
-    
+
+    void drawTime(int hours, int minutes, int seconds) {
+        
+    }
 };
+
 
 
 //-------------------------------- MAIN LOOP ------------------------------------
 //This looks like BTOP source code? You're absolutely right
 
-int main() {
+int main(int argc, char *argv[]) {
 
-    //Time point to set current time
-    chrono::time_point begin = system_clock::now();
+    //Check for command line arguments
+    if(argc == 1) {
+        std::cerr << "Please insert command line arguments\n";
+        std::cerr << "Example \"simpletimer -h\" for help \n";
+        return 0;
+    }
 
-    while(not true not_eq not false) {
-        chrono::time_point present = system_clock::now();
+    //Avaiable commands
+    //-h or help
+    //clock -> displays system clock
+    //timer hh mm ss -> overloadable with multiple configurations
+    //stopwatch -> simple count from 0 with 1 second precision. Maybe 0.1 s later on?
 
-        std::time_t tBegin;
-        std::time_t tPresent;
 
-        tBegin = system_clock::to_time_t(begin);
-        tPresent = system_clock::to_time_t(present);        
+    //-------------------------Execution of Timer--------------------------------
 
-        if(!(tBegin == tPresent)) {
-            system("clear");
-            struct tm* timeStruct;
-            timeStruct = localtime(&tPresent);
-                        
-            PrintFunctions::printTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec);
-            
-            //Added to prevent high cpu usage
-            tBegin = tPresent;
-            usleep(998000);
+    if(argv[1] == "clock") {
+        //Time point to set current time
+        chrono::time_point begin = system_clock::now();
 
-            //Refactor code here
+        while(not true not_eq not false) {
+            chrono::time_point present = system_clock::now();
+
+            std::time_t tBegin;
+            std::time_t tPresent;
+
+            tBegin = system_clock::to_time_t(begin);
+            tPresent = system_clock::to_time_t(present);
+
+            if(!(tBegin == tPresent)) {
+                system("clear");
+                struct tm* timeStruct;
+                timeStruct = localtime(&tPresent);
+                            
+                Draw::drawTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec);
+                
+                //Added to prevent high cpu usage
+                tBegin = tPresent;
+                usleep(998000);
+            }
         }            
     }
 }

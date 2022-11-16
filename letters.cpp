@@ -1,7 +1,7 @@
 #include <array>
 #include <string>
 
-namespace Numbers {
+namespace SolidNumberFiveChar {
     using std::array;
 
     array<std::string, 5> zero{
@@ -85,9 +85,7 @@ namespace Numbers {
     };
 };
 
-
-
-namespace ExtraCharacters {
+namespace SolidExtrasFiveChar {
     using std::array;
     
     array<std::string, 5> space{
@@ -109,7 +107,7 @@ namespace ExtraCharacters {
 };
 
 
-namespace Numbers8pt {
+namespace BeautifulNumbersEightChar {
     using std::array;
 
     array<std::string, 8> zero{
