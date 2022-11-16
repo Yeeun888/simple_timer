@@ -18,39 +18,43 @@ namespace PrintFunctions{ void printTime(int hours, int minutes, int seconds);}
 
 namespace PrintFunctions {
 
-    void printNumberLine(std::array<std::string, 5> arr, int lineNumber);
+    template<int num> void printNumberLine(std::array<std::string, num> arr, int lineNumber) {
+        std::cout << arr[lineNumber];
+    }
 
     void printNumber(int num, int line) {
+        const auto printLine = printNumberLine<5>;
+
         switch(num) {
             case 0:
-                printNumberLine(Numbers::zero, line); 
+                printLine(Numbers::zero, line); 
                 break;
             case 1: 
-                printNumberLine(Numbers::one, line); 
+                printLine(Numbers::one, line); 
                 break;
             case 2:
-                printNumberLine(Numbers::two, line); 
+                printLine(Numbers::two, line); 
                 break;
             case 3:
-                printNumberLine(Numbers::three, line); 
+                printLine(Numbers::three, line); 
                 break;
             case 4:
-                printNumberLine(Numbers::four, line); 
+                printLine(Numbers::four, line); 
                 break;
             case 5:
-                printNumberLine(Numbers::five, line); 
+                printLine(Numbers::five, line); 
                 break;
             case 6:
-                printNumberLine(Numbers::six, line); 
+                printLine(Numbers::six, line); 
                 break;
             case 7:
-                printNumberLine(Numbers::seven, line); 
+                printLine(Numbers::seven, line); 
                 break;
             case 8:
-                printNumberLine(Numbers::eight, line); 
+                printLine(Numbers::eight, line); 
                 break;
             case 9:
-                printNumberLine(Numbers::nine, line); 
+                printLine(Numbers::nine, line); 
                 break;
             default:
                 break;
@@ -58,11 +62,7 @@ namespace PrintFunctions {
 
     }
 
-    void printNumberLine(std::array<std::string, 5> arr, int lineNumber) {
-        std::cout << arr[lineNumber];
-    }
-    
-    auto& printCharacter = printNumberLine;    
+    const auto printCharacter = printNumberLine<5>;    
 
     void twoNumbers(int hours, int row) {
         int firstNumber = hours / 10;
