@@ -118,19 +118,19 @@ namespace BeautifulNumbersEightChar {
         "888    888    ",    
         "888    888    ",    
         "Y88b  d88P    ",    
-        "\"Y8888P\"      ",   
+        " \"Y8888P\"     ",   
 
     };
 
     array<std::string, 8> one{
-        " d888         ",
-        "d8888         ",
-        "  888         ",
-        "  888         ",
-        "  888         ",
-        "  888         ",
-        "  888         ",
-        "8888888       ",
+        "   888       ",
+        "od8888       ",
+        "   888       ",
+        "   888       ",
+        "   888       ",
+        "   888       ",
+        "   888       ",
+        "888888888    ",
     };
 
     array<std::string, 8> two{
@@ -219,6 +219,21 @@ namespace BeautifulNumbersEightChar {
         "       888    ",
         "Y88b  d88P    ",
         " \"Y8888P\"     ",
+    };
+};
+
+namespace BeautifulExtraCharEight{
+    using std::array;
+
+    array<std::string, 8> colon{
+        "        ",
+        " d0b    ",
+        " 90P    ",
+        "        ",
+        "        ",
+        " d0b    ",
+        " 90P    ",
+        "        ",
     };
 };
 

@@ -111,26 +111,44 @@ namespace Draw {
     }
 
     void drawLine(int num) {
-       // for(int i{ 0 }; i < num; ++i) {
-       //     std::cout << " ";
-       // }
-        std::cout << "\n";
+         for(int i{ 0 }; i < num; ++i) {
+            std::cout << "\n";
+        }
+    }
+
+    void repeatSpace(int num) {
+        for(int i{ 0 }; i < num; ++i) {
+            std::cout << ' ';
+        }
     }
 
     void callNumberLine(int hours, int minutes, int seconds, int line) {
         NumberPrintFunctions::printNumberEight(hours / 10, line); 
         NumberPrintFunctions::printNumberEight(hours % 10, line); 
+        NumberPrintFunctions::printNumberLine<8>(BeautifulExtraCharEight::colon, line);
         NumberPrintFunctions::printNumberEight(minutes / 10, line); 
         NumberPrintFunctions::printNumberEight(minutes % 10, line); 
+        NumberPrintFunctions::printNumberLine<8>(BeautifulExtraCharEight::colon, line);
         NumberPrintFunctions::printNumberEight(seconds / 10, line); 
         NumberPrintFunctions::printNumberEight(seconds % 10, line); 
     }
 
     void drawTime(int hours, int minutes, int seconds, int minWidth, int minHeight) {
-        for(int i = 0; i < 8; ++i) {
+        updateWindowSize();
+
+        //BufferSpace variables are used to calculate space around the clock itself
+        int verticalBufferSpace = (terminalHeight - minHeight) / 2; 
+        int horizonalBufferSpace = (terminalWidth - minWidth) / 2;
+    
+        drawLine(verticalBufferSpace);
+
+        for(int i = 0; i < minHeight; ++i) {
+            repeatSpace(horizonalBufferSpace);
             callNumberLine(hours, minutes, seconds, i);
             std::cout << '\n';
         }
+
+        drawLine(verticalBufferSpace);
     }
 };
 
@@ -138,11 +156,6 @@ namespace Draw {
 //This looks like BTOP source code? You're absolutely right
 
 int main(int argc, char *argv[]) {
-
-   // for(int i{0}; i < 8; ++i) {
-   //     Draw::callNumberLine(13, 54, 30, i);
-   //     std::cout << '\n';
-   // }
 
     //Check for command line arguments
     if(argc == 1) {
@@ -157,7 +170,7 @@ int main(int argc, char *argv[]) {
     //timer hh mm ss -> overloadable with multiple configurations
     //stopwatch -> simple count from 0 with 1 second precision. Maybe 0.1 s later on?
 
-    //-------------------------Execution of Timer--------------------------------
+    //-------------------------Execution of Clock--------------------------------
 
     if(strcmp(argv[1], "clock") == 0) {
         //Time point to set current time
@@ -179,8 +192,13 @@ int main(int argc, char *argv[]) {
                 Draw::drawTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec, 98, 8);
                 //Added to prevent high cpu usage
                 tBegin = tPresent;
-                usleep(90000);
+                usleep(900000);
             }
         }            
+    }
+
+    //-------------------------Execution of Timer--------------------------------
+    if(strcmp(argv[1], "timer") == 0) {
+        
     }
 }
