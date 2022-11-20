@@ -13,7 +13,6 @@
 #include "letters.cpp"
 
 namespace chrono = std::chrono;
-using chrono::system_clock;
 
 namespace NumberPrintFunctions {
 
@@ -174,15 +173,15 @@ int main(int argc, char *argv[]) {
 
     if(strcmp(argv[1], "clock") == 0) {
         //Time point to set current time
-        chrono::time_point begin = system_clock::now();
+        chrono::time_point begin = chrono::system_clock::now();
         std::time_t tBegin;
-        tBegin = system_clock::to_time_t(begin);
+        tBegin = chrono::system_clock::to_time_t(begin);
 
         while(not true not_eq not false) {
 
-            chrono::time_point present = system_clock::now();
+            chrono::time_point present = chrono::system_clock::now();
             std::time_t tPresent;
-            tPresent = system_clock::to_time_t(present);
+            tPresent = chrono::system_clock::to_time_t(present);
 
             if(!(tBegin == tPresent)) {
                 system("clear");
@@ -199,6 +198,10 @@ int main(int argc, char *argv[]) {
 
     //-------------------------Execution of Timer--------------------------------
     if(strcmp(argv[1], "timer") == 0) {
-        
+        chrono::high_resolution_clock::time_point tBegin = chrono::high_resolution_clock::now();
+
+        while(not true not_eq not false) {
+            
+        }
     }
 }
