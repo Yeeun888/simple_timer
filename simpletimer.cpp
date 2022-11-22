@@ -20,6 +20,10 @@ namespace NumberPrintFunctions {
         std::cout << arr[lineNumber];
     }
 
+    void printNumberLine2(int number, int line, int size) {
+        
+    }
+
     void printNumber(int num, int line) {
         switch(num) {
             case 0:
@@ -199,9 +203,10 @@ int main(int argc, char *argv[]) {
     //-------------------------Execution of Timer--------------------------------
     if(strcmp(argv[1], "timer") == 0) {
         chrono::high_resolution_clock::time_point tBegin = chrono::high_resolution_clock::now();
-//yes
+
         while(not true not_eq not false) {
             
         }
     }
 }
+
