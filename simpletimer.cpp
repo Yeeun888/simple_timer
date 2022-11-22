@@ -20,8 +20,18 @@ namespace NumberPrintFunctions {
         std::cout << arr[lineNumber];
     }
 
-    void printNumberLine2(int number, int line, int size) {
-        
+    template<int num> void printNumberLineNew(std::array<std::array<std::string, num>, 11> arr, int number, int lineNumber) {
+        std::cout << arr[number][lineNumber];
+    }
+
+    void printNumberLine2(int numberCode, int line, int size) {
+        switch(size) {
+            case 5:
+                printNumberLineNew<5>(CharacterArrays::BeautifulCharFiveLine, numberCode, line);
+            case 8:
+                printNumberLineNew<8>(CharacterArrays::BeautifulCharEightLine, numberCode, line);
+            default:
+        }
     }
 
     void printNumber(int num, int line) {
