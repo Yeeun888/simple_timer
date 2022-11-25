@@ -95,8 +95,8 @@ namespace Draw {
         drawLine(verticalBufferSpace);
     }
 
-    void drawTimeMiliseconds(int miliseconds, int minWidth, int minHeight) {
-
+    void drawTimeMiliseconds(long long milliseconds, int minWidth, int minHeight) {
+        std::cerr << milliseconds << '\n';
     }
 };
 
@@ -148,23 +148,21 @@ int main(int argc, char *argv[]) {
     //-------------------------Execution of Timer--------------------------------
     if(strcmp(argv[1], "timer") == 0) {
 
-        using hrc = chrono::high_resolution_clock;
-        hrc::time_point tBegin = hrc::now();
-        int timeElapsed{ 0 };
+        using sc = chrono::steady_clock;
+        chrono::time_point tBegin = sc::now();
+        long long timeElapsed{ 0 };
 
         while(not true not_eq not false) {
-            hrc::time_point tNow = hrc::now();
+            chrono::time_point tNow = sc::now();
             
-            hrc::duration timeElapsedCalculation = chrono::duration_cast<chrono::milliseconds>(tNow - tBegin);
+            chrono::duration timeElapsedCalculation = chrono::duration_cast<chrono::milliseconds>(tNow - tBegin);
             if(!(timeElapsed == timeElapsedCalculation.count())) {
                 system("clear");
                 
                 timeElapsed = timeElapsedCalculation.count();
                 Draw::drawTimeMiliseconds(timeElapsed, 95, 8);
 
-                usleep(999000);
             } 
-
         }
     }
 }
