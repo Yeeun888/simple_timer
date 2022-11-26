@@ -12,14 +12,14 @@
 
 #include "letters.cpp"
 
-#define DEBUG_TESTCODE
+//#define DEBUG_TESTCODE
 
 namespace chrono = std::chrono;
 
 namespace NumberPrintFunctions {
 
     //Inline template function to print single line of a number from letters.cpp
-    template<int num> inline void printNumberLine(std::array<std::array<std::string, num>, 11> arr, int number, int lineNumber) {
+    template<int num> inline void printNumberLineIndiv(std::array<std::array<std::string, num>, 11> arr, int number, int lineNumber) {
         std::cout << arr[number][lineNumber];
     }
 
@@ -27,10 +27,10 @@ namespace NumberPrintFunctions {
     void printNumberLine(int numberCode, int line, int size) {
         switch(size) {
             case 5:
-                printNumberLine<5>(CharacterArrays::BeautifulCharFiveLine, numberCode, line);
+                printNumberLineIndiv<5>(CharacterArrays::BeautifulCharFiveLine, numberCode, line);
                 break;
             case 8:
-                printNumberLine<8>(CharacterArrays::BeautifulCharEightLine, numberCode, line);
+                printNumberLineIndiv<8>(CharacterArrays::BeautifulCharEightLine, numberCode, line);
                 break;
             default:
                 //Cleanup
@@ -102,16 +102,16 @@ namespace Draw {
         NumberPrintFunctions::printNumberLine(seconds / 10, line, 8);
         NumberPrintFunctions::printNumberLine(seconds % 10, line, 8);
 
-        if(line > 2) {
+        if(line >= 3) {
             NumberPrintFunctions::printNumberLine(milliseconds / 100, line - 3, 5);
-            NumberPrintFunctions::printNumberLine((milliseconds / 10) % 10 , line - 3, 5);
-            NumberPrintFunctions::printNumberLine(milliseconds % 100, line - 3, 5);
+            NumberPrintFunctions::printNumberLine((milliseconds / 10) % 10, line - 3, 5);
+            NumberPrintFunctions::printNumberLine((milliseconds % 10) % 10, line - 3, 5);
         }
     }
 
-    void drawTimeMilliseconds(long long milliseconds, int minWidth, int minHeight) {
+    void drawTimeMilliseconds(int milliseconds, int minWidth, int minHeight) {
         for(int drawnNumberLine = 0; drawnNumberLine < minHeight; ++drawnNumberLine) {
-            callNumberLineMiliseconds(99,99,999, drawnNumberLine);
+            callNumberLineMiliseconds(milliseconds / 36000 ,milliseconds / 1000,milliseconds % 1000, drawnNumberLine);
             //callNumberLineMiliseconds(milliseconds / 3600000 , milliseconds / 1000, milliseconds % 1000, drawnNumberLine);
             std::cout << '\n';
         }
@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
 
     #ifdef DEBUG_TESTCODE
 
-    //Use this space to debug functions
+    //Use this space to call functions instantly
     Draw::drawTimeMilliseconds(2566, 98, 8);
 
     #endif
