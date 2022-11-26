@@ -12,6 +12,8 @@
 
 #include "letters.cpp"
 
+#define DEBUG_TESTCODE
+
 namespace chrono = std::chrono;
 
 namespace NumberPrintFunctions {
@@ -91,12 +93,28 @@ namespace Draw {
             std::cout << '\n';
         }
 
-        //Reassess if it is necessary at all
-        drawLine(verticalBufferSpace);
     }
 
-    void drawTimeMiliseconds(long long milliseconds, int minWidth, int minHeight) {
-        std::cerr << milliseconds << '\n';
+    void callNumberLineMiliseconds(int minutes, int seconds, int milliseconds, int line) {
+        NumberPrintFunctions::printNumberLine(minutes / 10, line, 8);
+        NumberPrintFunctions::printNumberLine(minutes % 10, line, 8);
+        NumberPrintFunctions::printNumberLine(10, line, 8);
+        NumberPrintFunctions::printNumberLine(seconds / 10, line, 8);
+        NumberPrintFunctions::printNumberLine(seconds % 10, line, 8);
+
+        if(line > 2) {
+            NumberPrintFunctions::printNumberLine(milliseconds / 100, line - 3, 5);
+            NumberPrintFunctions::printNumberLine((milliseconds / 10) % 10 , line - 3, 5);
+            NumberPrintFunctions::printNumberLine(milliseconds % 100, line - 3, 5);
+        }
+    }
+
+    void drawTimeMilliseconds(long long milliseconds, int minWidth, int minHeight) {
+        for(int drawnNumberLine = 0; drawnNumberLine < minHeight; ++drawnNumberLine) {
+            callNumberLineMiliseconds(99,99,999, drawnNumberLine);
+            //callNumberLineMiliseconds(milliseconds / 3600000 , milliseconds / 1000, milliseconds % 1000, drawnNumberLine);
+            std::cout << '\n';
+        }
     }
 };
 
@@ -104,6 +122,13 @@ namespace Draw {
 //This looks like BTOP source code? This project is inspired by BTOP
 
 int main(int argc, char *argv[]) {
+
+    #ifdef DEBUG_TESTCODE
+
+    //Use this space to debug functions
+    Draw::drawTimeMilliseconds(2566, 98, 8);
+
+    #endif
 
     //Check for command line arguments
     if(argc == 1) {
@@ -160,7 +185,7 @@ int main(int argc, char *argv[]) {
                 system("clear");
                 
                 timeElapsed = timeElapsedCalculation.count();
-                Draw::drawTimeMiliseconds(timeElapsed, 95, 8);
+                Draw::drawTimeMilliseconds(timeElapsed, 95, 8);
 
             } 
         }
