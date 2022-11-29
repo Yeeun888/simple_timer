@@ -6,6 +6,7 @@
 #include <array>
 #include <string>
 #include <sys/ioctl.h>
+#include <sstream>
 
 #include <time.h>
 #include <unistd.h> //Use of sleep
@@ -105,17 +106,39 @@ namespace Draw {
         if(line >= 3) {
             NumberPrintFunctions::printNumberLine(milliseconds / 100, line - 3, 5);
             NumberPrintFunctions::printNumberLine((milliseconds / 10) % 10, line - 3, 5);
-            NumberPrintFunctions::printNumberLine((milliseconds % 10) % 10, line - 3, 5);
+            //NumberPrintFunctions::printNumberLine((milliseconds % 10) % 10, line - 3, 5);
         }
     }
 
     void drawTimeMilliseconds(int milliseconds, int minWidth, int minHeight) {
+        
+
         for(int drawnNumberLine = 0; drawnNumberLine < minHeight; ++drawnNumberLine) {
             callNumberLineMiliseconds(milliseconds / 36000 ,milliseconds / 1000,milliseconds % 1000, drawnNumberLine);
             //callNumberLineMiliseconds(milliseconds / 3600000 , milliseconds / 1000, milliseconds % 1000, drawnNumberLine);
             std::cout << '\n';
         }
+
+
     }
+};
+
+namespace Timer {
+    int stringToInteger(std::string &&testString) {
+        //This workss??? HAHAHAHAHAHAH cpp please fucking pointers
+        std::stringstream temporaryObject{ testString };
+        int returnInteger;
+
+        temporaryObject >> returnInteger;
+
+        return returnInteger;
+    }
+
+    void timerLoop(int hours = 0, int minutes = 0, int seconds = 0) {
+        chrono::high_resolution_clock::time_point startTime = chrono::high_resolution_clock::now();
+        
+    }
+    
 };
 
 //-------------------------------- MAIN LOOP ------------------------------------
@@ -159,6 +182,8 @@ int main(int argc, char *argv[]) {
 
             if(!(tBegin == tPresent)) {
                 system("clear");
+                system("clear");
+
                 struct tm* timeStruct;
                 timeStruct = localtime(&tPresent);
                             
@@ -170,8 +195,8 @@ int main(int argc, char *argv[]) {
         }            
     }
 
-    //-------------------------Execution of Timer--------------------------------
-    if(strcmp(argv[1], "timer") == 0) {
+    //-------------------------Execution of Stopwatch--------------------------------
+    if(strcmp(argv[1], "stopwatch") == 0) {
 
         using sc = chrono::steady_clock;
         chrono::time_point tBegin = sc::now();
@@ -183,11 +208,30 @@ int main(int argc, char *argv[]) {
             chrono::duration timeElapsedCalculation = chrono::duration_cast<chrono::milliseconds>(tNow - tBegin);
             if(!(timeElapsed == timeElapsedCalculation.count())) {
                 system("clear");
+                printf("\e[3J");
                 
                 timeElapsed = timeElapsedCalculation.count();
                 Draw::drawTimeMilliseconds(timeElapsed, 95, 8);
-
+                usleep(1000);
             } 
+        }
+    }
+
+    //-------------------------Execution of Timer--------------------------------
+    if(strcmp(argv[1], "timer") == 0) {
+
+        switch(argc) {
+            case(3): 
+                int testInt{ Timer::stringToInteger(argv[2]) };
+
+                printf("This is the hour variable: %i", testInt);
+                break; 
+
+            case(4):
+            case(5):
+        
+            default:
+                std::cout << "Enter the appropriate amount of variables\n";
         }
     }
 }
