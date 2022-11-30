@@ -13,7 +13,7 @@
 
 #include "letters.cpp"
 
-//#define DEBUG_TESTCODE
+#define DEBUG_TESTCODE
 
 namespace chrono = std::chrono;
 
@@ -134,9 +134,25 @@ namespace Timer {
         return returnInteger;
     }
 
-    void timerLoop(int hours = 0, int minutes = 0, int seconds = 0) {
+    void timerLoop(int seconds = 0, int minutes = 0, int hours = 0) {
+
+        //Initialize time left in seconds
+        int timeRemaining{ hours * 3600 + minutes * 60 + seconds };
+
         chrono::high_resolution_clock::time_point startTime = chrono::high_resolution_clock::now();
-        
+
+        while(true) {
+            chrono::high_resolution_clock::time_point nowTime = chrono::high_resolution_clock::now();
+            chrono::duration clockElapsed = chrono::duration_cast<chrono::seconds>(nowTime - startTime);
+
+            if(clockElapsed.count() == 1) { //If there is a one second difference
+                
+                Draw::drawTime(timeRemaining / 3600, (timeRemaining % 3600) / 60, timeRemaining % 60, 98, 8);
+                startTime = chrono::high_resolution_clock::now();
+                timeRemaining -= 1;
+
+            }
+        }
     }
     
 };
@@ -149,7 +165,7 @@ int main(int argc, char *argv[]) {
     #ifdef DEBUG_TESTCODE
 
     //Use this space to call functions instantly
-    Draw::drawTimeMilliseconds(2566, 98, 8);
+    Timer::timerLoop(0,0,50);
 
     #endif
 
@@ -221,15 +237,13 @@ int main(int argc, char *argv[]) {
     if(strcmp(argv[1], "timer") == 0) {
 
         switch(argc) {
-            case(3): 
+            case(3): {
                 int testInt{ Timer::stringToInteger(argv[2]) };
 
                 printf("This is the hour variable: %i", testInt);
                 break; 
-
-            case(4):
-            case(5):
-        
+            }
+                    
             default:
                 std::cout << "Enter the appropriate amount of variables\n";
         }
