@@ -13,8 +13,6 @@
 
 #include "letters.cpp"
 
-#define DEBUG_TESTCODE
-
 namespace chrono = std::chrono;
 
 namespace NumberPrintFunctions {
@@ -146,7 +144,9 @@ namespace Timer {
             chrono::duration clockElapsed = chrono::duration_cast<chrono::seconds>(nowTime - startTime);
 
             if(clockElapsed.count() == 1) { //If there is a one second difference
-                
+                system("clear");
+                printf("\e[3J");
+
                 Draw::drawTime(timeRemaining / 3600, (timeRemaining % 3600) / 60, timeRemaining % 60, 98, 8);
                 startTime = chrono::high_resolution_clock::now();
                 timeRemaining -= 1;
@@ -235,15 +235,31 @@ int main(int argc, char *argv[]) {
 
     //-------------------------Execution of Timer--------------------------------
     if(strcmp(argv[1], "timer") == 0) {
-
         switch(argc) {
             case(3): {
-                int testInt{ Timer::stringToInteger(argv[2]) };
+                Timer::timerLoop(
+                    Timer::stringToInteger(argv[2])
+                );
+                break;
+            }
 
-                printf("This is the hour variable: %i", testInt);
+            case(4): {
+                Timer::timerLoop(
+                    Timer::stringToInteger(argv[2]),
+                    Timer::stringToInteger(argv[3])
+                );
                 break; 
             }
-                    
+            
+            case(5): {
+                Timer::timerLoop(
+                    Timer::stringToInteger(argv[2]),
+                    Timer::stringToInteger(argv[3]),
+                    Timer::stringToInteger(argv[4])
+                );
+                break; 
+            }
+
             default:
                 std::cout << "Enter the appropriate amount of variables\n";
         }
