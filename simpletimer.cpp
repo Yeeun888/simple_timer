@@ -92,6 +92,8 @@ namespace Draw {
             std::cout << '\n';
         }
 
+        drawLine(verticalBufferSpace);
+
     }
 
     void callNumberLineMiliseconds(int minutes, int seconds, int milliseconds, int line) {
@@ -109,15 +111,21 @@ namespace Draw {
     }
 
     void drawTimeMilliseconds(int milliseconds, int minWidth, int minHeight) {
-        
+        updateWindowSize();
 
+        //BufferSpace variables are used to calculate space around the clock itself
+        int verticalBufferSpace = (terminalHeight - minHeight) / 2; 
+        int horizonalBufferSpace = (terminalWidth - minWidth) / 2;
+    
+        drawLine(verticalBufferSpace);
+ 
         for(int drawnNumberLine = 0; drawnNumberLine < minHeight; ++drawnNumberLine) {
             callNumberLineMiliseconds(milliseconds / 36000 ,milliseconds / 1000,milliseconds % 1000, drawnNumberLine);
             //callNumberLineMiliseconds(milliseconds / 3600000 , milliseconds / 1000, milliseconds % 1000, drawnNumberLine);
             std::cout << '\n';
         }
 
-
+        drawLine(verticalBufferSpace);
     }
 };
 
@@ -198,7 +206,7 @@ int main(int argc, char *argv[]) {
 
             if(!(tBegin == tPresent)) {
                 system("clear");
-                system("clear");
+                printf("\e[3J");
 
                 struct tm* timeStruct;
                 timeStruct = localtime(&tPresent);
@@ -214,22 +222,22 @@ int main(int argc, char *argv[]) {
     //-------------------------Execution of Stopwatch--------------------------------
     if(strcmp(argv[1], "stopwatch") == 0) {
 
-        using sc = chrono::steady_clock;
-        chrono::time_point tBegin = sc::now();
-        long long timeElapsed{ 0 };
+        int time{ 0 };
 
-        while(not true not_eq not false) {
-            chrono::time_point tNow = sc::now();
-            
-            chrono::duration timeElapsedCalculation = chrono::duration_cast<chrono::milliseconds>(tNow - tBegin);
-            if(!(timeElapsed == timeElapsedCalculation.count())) {
+        chrono::high_resolution_clock::time_point startTime = chrono::high_resolution_clock::now();
+
+        while(true) {
+            chrono::high_resolution_clock::time_point nowTime = chrono::high_resolution_clock::now();
+            chrono::duration clockElapsed = chrono::duration_cast<chrono::seconds>(nowTime - startTime);
+
+            if(clockElapsed.count() == 1) { //If there is a one second difference
                 system("clear");
                 printf("\e[3J");
-                
-                timeElapsed = timeElapsedCalculation.count();
-                Draw::drawTimeMilliseconds(timeElapsed, 95, 8);
-                usleep(1000);
-            } 
+
+                Draw::drawTime(time / 3600, (time % 3600) / 60, time % 60, 98, 8);
+                startTime = chrono::high_resolution_clock::now();
+                time += 1;    
+            }
         }
     }
 
