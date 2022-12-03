@@ -150,6 +150,10 @@ namespace Timer {
         while(true) {
             chrono::high_resolution_clock::time_point nowTime = chrono::high_resolution_clock::now();
             chrono::duration clockElapsed = chrono::duration_cast<chrono::seconds>(nowTime - startTime);
+            
+            if (timeRemaining == -1) {
+                break;
+            }
 
             if(clockElapsed.count() == 1) { //If there is a one second difference
                 system("clear");
@@ -158,8 +162,9 @@ namespace Timer {
                 Draw::drawTime(timeRemaining / 3600, (timeRemaining % 3600) / 60, timeRemaining % 60, 98, 8);
                 startTime = chrono::high_resolution_clock::now();
                 timeRemaining -= 1;
-
             }
+
+            
         }
     }
     
@@ -236,7 +241,7 @@ int main(int argc, char *argv[]) {
 
                 Draw::drawTime(time / 3600, (time % 3600) / 60, time % 60, 98, 8);
                 startTime = chrono::high_resolution_clock::now();
-                time += 1;    
+                time += 1;
             }
         }
     }
