@@ -32,10 +32,11 @@ namespace NumberPrintFunctions {
                 printNumberLineIndiv<8>(CharacterArrays::BeautifulCharEightLine, numberCode, line);
                 break;
             default:
-                //Cleanup
+                throw std::invalid_argument("There is no available number");
                 break;
         }
     }
+
 };
 
 namespace Draw {
@@ -52,29 +53,28 @@ namespace Draw {
         terminalHeight = w.ws_row;
     }
 
-    void drawLine(int num) {
+    inline void drawLine(int num) {
          for(int i{ 0 }; i < num; ++i) {
             std::cout << "\n";
         }
     }
 
-    void repeatSpace(int num) {
+    inline void repeatSpace(int num) {
         for(int i{ 0 }; i < num; ++i) {
             std::cout << ' ';
         }
     }
 
     //Slightly messy function calls 6 numbers and a colon PER LINE
-
-    void callNumberLine(int hours, int minutes, int seconds, int line) {
-        NumberPrintFunctions::printNumberLine(hours / 10, line, 8);
-        NumberPrintFunctions::printNumberLine(hours % 10, line, 8);
+    void callNumberLine(int hours, int minutes, int seconds, int line, int size) {
+        NumberPrintFunctions::printNumberLine(hours / 10, line, size);
+        NumberPrintFunctions::printNumberLine(hours % 10, line, size);
         NumberPrintFunctions::printNumberLine(10, line, 8);
-        NumberPrintFunctions::printNumberLine(minutes / 10, line, 8);
-        NumberPrintFunctions::printNumberLine(minutes % 10, line, 8);
+        NumberPrintFunctions::printNumberLine(minutes / 10, line, size);
+        NumberPrintFunctions::printNumberLine(minutes % 10, line, size);
         NumberPrintFunctions::printNumberLine(10, line, 8);
-        NumberPrintFunctions::printNumberLine(seconds / 10, line, 8);
-        NumberPrintFunctions::printNumberLine(seconds % 10, line, 8);
+        NumberPrintFunctions::printNumberLine(seconds / 10, line, size);
+        NumberPrintFunctions::printNumberLine(seconds % 10, line, size);
     }
 
     void drawTime(int hours, int minutes, int seconds, int minWidth, int minHeight) {
@@ -88,7 +88,7 @@ namespace Draw {
 
         for(int drawnNumberLine = 0; drawnNumberLine < minHeight; ++drawnNumberLine) {
             repeatSpace(horizonalBufferSpace);
-            callNumberLine(hours, minutes, seconds, drawnNumberLine);
+            callNumberLine(hours, minutes, seconds, drawnNumberLine, minHeight);
             std::cout << '\n';
         }
 
@@ -159,15 +159,12 @@ namespace Timer {
                 system("clear");
                 printf("\e[3J");
 
-                Draw::drawTime(timeRemaining / 3600, (timeRemaining % 3600) / 60, timeRemaining % 60, 98, 8);
+                Draw::drawTime(timeRemaining / 3600, (timeRemaining % 3600) / 60, timeRemaining % 60, 94, 8);
                 startTime = chrono::high_resolution_clock::now();
                 timeRemaining -= 1;
             }
-
-            
         }
     }
-    
 };
 
 //-------------------------------- MAIN LOOP ------------------------------------
@@ -216,7 +213,7 @@ int main(int argc, char *argv[]) {
                 struct tm* timeStruct;
                 timeStruct = localtime(&tPresent);
                             
-                Draw::drawTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec, 98, 8);
+                Draw::drawTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec, 94, 5);
                 //Added to prevent high cpu usage
                 tBegin = tPresent;
                 usleep(999000);
@@ -239,7 +236,7 @@ int main(int argc, char *argv[]) {
                 system("clear");
                 printf("\e[3J");
 
-                Draw::drawTime(time / 3600, (time % 3600) / 60, time % 60, 98, 8);
+                Draw::drawTime(time / 3600, (time % 3600) / 60, time % 60, 94, 8);
                 startTime = chrono::high_resolution_clock::now();
                 time += 1;
             }
