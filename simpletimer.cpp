@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ctime> //Use ot time_t 
 #include <cstring>
-#include <ratio>
+#include <map>  
 #include <chrono>
 #include <array>
 #include <string>
@@ -17,10 +17,18 @@ namespace chrono = std::chrono;
 
 namespace NumberPrintFunctions {
 
+
     //Inline template function to print single line of a number from letters.cpp
     template<int num> inline void printNumberLineIndiv(std::array<std::array<std::string, num>, 11> arr, int number, int lineNumber) {
         std::cout << arr[number][lineNumber];
     }
+
+    //Map for minimum length of drawTime based on charHeight
+    //All of this is manually calculated
+    std::map<int, int> heightBasedOnWidth = {
+        {5, 48},
+        {8, 94}
+    };
 
     //Switch function to choose array based on number and call printNumberLine function
     void printNumberLine(int numberCode, int line, int size) {
@@ -32,7 +40,7 @@ namespace NumberPrintFunctions {
                 printNumberLineIndiv<8>(CharacterArrays::BeautifulCharEightLine, numberCode, line);
                 break;
             default:
-                throw std::invalid_argument("There is no available number");
+                throw std::invalid_argument("No available font");
                 break;
         }
     }
@@ -40,6 +48,11 @@ namespace NumberPrintFunctions {
 };
 
 namespace Draw {
+    //Clear screen function utilizes escape codes
+    inline void clearScreen() {
+        printf("\e[1;1H\e[2J\e[3J");
+    }
+
     //Draw space before drawing time. 
     //Space calculates empty space for text other than the time
     static int terminalWidth{ 0 };
@@ -77,56 +90,59 @@ namespace Draw {
         NumberPrintFunctions::printNumberLine(seconds % 10, line, size);
     }
 
-    void drawTime(int hours, int minutes, int seconds, int minWidth, int minHeight) {
+    void drawTime(int hours, int minutes, int seconds, int fontHeight) {
         updateWindowSize();
 
         //BufferSpace variables are used to calculate space around the clock itself
-        int verticalBufferSpace = (terminalHeight - minHeight) / 2; 
-        int horizonalBufferSpace = (terminalWidth - minWidth) / 2;
+        int verticalBufferSpace = (terminalHeight - fontHeight) / 2; 
+        int horizonalBufferSpace = (
+            terminalWidth - NumberPrintFunctions::heightBasedOnWidth[fontHeight]) / 2;
     
         drawLine(verticalBufferSpace);
 
-        for(int drawnNumberLine = 0; drawnNumberLine < minHeight; ++drawnNumberLine) {
+        for(int drawnNumberLine = 0; drawnNumberLine < fontHeight; ++drawnNumberLine) {
             repeatSpace(horizonalBufferSpace);
-            callNumberLine(hours, minutes, seconds, drawnNumberLine, minHeight);
+            callNumberLine(hours, minutes, seconds, drawnNumberLine, fontHeight);
             std::cout << '\n';
         }
 
+        //Most terminals preserve cursor. Having more buffer makes timer look better
         drawLine(verticalBufferSpace);
-
     }
 
-    void callNumberLineMiliseconds(int minutes, int seconds, int milliseconds, int line) {
-        NumberPrintFunctions::printNumberLine(minutes / 10, line, 8);
-        NumberPrintFunctions::printNumberLine(minutes % 10, line, 8);
-        NumberPrintFunctions::printNumberLine(10, line, 8);
-        NumberPrintFunctions::printNumberLine(seconds / 10, line, 8);
-        NumberPrintFunctions::printNumberLine(seconds % 10, line, 8);
-
-        if(line >= 3) {
-            NumberPrintFunctions::printNumberLine(milliseconds / 100, line - 3, 5);
-            NumberPrintFunctions::printNumberLine((milliseconds / 10) % 10, line - 3, 5);
-            //NumberPrintFunctions::printNumberLine((milliseconds % 10) % 10, line - 3, 5);
-        }
-    }
-
-    void drawTimeMilliseconds(int milliseconds, int minWidth, int minHeight) {
-        updateWindowSize();
-
-        //BufferSpace variables are used to calculate space around the clock itself
-        int verticalBufferSpace = (terminalHeight - minHeight) / 2; 
-        int horizonalBufferSpace = (terminalWidth - minWidth) / 2;
+    //ALL DEPRECATED FUNCTIONS. ALL NOT NEED ANYMORE 
     
-        drawLine(verticalBufferSpace);
- 
-        for(int drawnNumberLine = 0; drawnNumberLine < minHeight; ++drawnNumberLine) {
-            callNumberLineMiliseconds(milliseconds / 36000 ,milliseconds / 1000,milliseconds % 1000, drawnNumberLine);
-            //callNumberLineMiliseconds(milliseconds / 3600000 , milliseconds / 1000, milliseconds % 1000, drawnNumberLine);
-            std::cout << '\n';
-        }
+   //void callNumberLineMiliseconds(int minutes, int seconds, int milliseconds, int line) {
+   //    NumberPrintFunctions::printNumberLine(minutes / 10, line, 8);
+   //    NumberPrintFunctions::printNumberLine(minutes % 10, line, 8);
+   //    NumberPrintFunctions::printNumberLine(10, line, 8);
+   //    NumberPrintFunctions::printNumberLine(seconds / 10, line, 8);
+   //    NumberPrintFunctions::printNumberLine(seconds % 10, line, 8);
 
-        drawLine(verticalBufferSpace);
-    }
+   //    if(line >= 3) {
+   //        NumberPrintFunctions::printNumberLine(milliseconds / 100, line - 3, 5);
+   //        NumberPrintFunctions::printNumberLine((milliseconds / 10) % 10, line - 3, 5);
+   //        //NumberPrintFunctions::printNumberLine((milliseconds % 10) % 10, line - 3, 5);
+   //    }
+   //}
+
+   //void drawTimeMilliseconds(int milliseconds, int minWidth, int minHeight) {
+   //    updateWindowSize();
+
+   //    //BufferSpace variables are used to calculate space around the clock itself
+   //    int verticalBufferSpace = (terminalHeight - minHeight) / 2; 
+   //    int horizonalBufferSpace = (terminalWidth - minWidth) / 2;
+   //
+   //    drawLine(verticalBufferSpace);
+ 
+   //    for(int drawnNumberLine = 0; drawnNumberLine < minHeight; ++drawnNumberLine) {
+   //        callNumberLineMiliseconds(milliseconds / 36000 ,milliseconds / 1000,milliseconds % 1000, drawnNumberLine);
+   //        //callNumberLineMiliseconds(milliseconds / 3600000 , milliseconds / 1000, milliseconds % 1000, drawnNumberLine);
+   //        std::cout << '\n';
+   //    }
+
+   //    drawLine(verticalBufferSpace);
+   //}
 };
 
 namespace Timer {
@@ -156,10 +172,9 @@ namespace Timer {
             }
 
             if(clockElapsed.count() == 1) { //If there is a one second difference
-                system("clear");
-                printf("\e[3J");
+                Draw::clearScreen();
 
-                Draw::drawTime(timeRemaining / 3600, (timeRemaining % 3600) / 60, timeRemaining % 60, 94, 8);
+                Draw::drawTime(timeRemaining / 3600, (timeRemaining % 3600) / 60, timeRemaining % 60, 8);
                 startTime = chrono::high_resolution_clock::now();
                 timeRemaining -= 1;
             }
@@ -194,6 +209,7 @@ int main(int argc, char *argv[]) {
 
     //-------------------------Execution of Clock--------------------------------
 
+
     if(strcmp(argv[1], "clock") == 0) {
         //Time point to set current time
         chrono::time_point begin = chrono::system_clock::now();
@@ -207,13 +223,12 @@ int main(int argc, char *argv[]) {
             tPresent = chrono::system_clock::to_time_t(present);
 
             if(!(tBegin == tPresent)) {
-                system("clear");
-                printf("\e[3J");
+                Draw::clearScreen();
 
                 struct tm* timeStruct;
                 timeStruct = localtime(&tPresent);
                             
-                Draw::drawTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec, 94, 5);
+                Draw::drawTime(timeStruct->tm_hour,timeStruct->tm_min, timeStruct->tm_sec, 8);
                 //Added to prevent high cpu usage
                 tBegin = tPresent;
                 usleep(999000);
@@ -233,10 +248,9 @@ int main(int argc, char *argv[]) {
             chrono::duration clockElapsed = chrono::duration_cast<chrono::seconds>(nowTime - startTime);
 
             if(clockElapsed.count() == 1) { //If there is a one second difference
-                system("clear");
-                printf("\e[3J");
+                Draw::clearScreen();
 
-                Draw::drawTime(time / 3600, (time % 3600) / 60, time % 60, 94, 8);
+                Draw::drawTime(time / 3600, (time % 3600) / 60, time % 60, 8);
                 startTime = chrono::high_resolution_clock::now();
                 time += 1;
             }
@@ -245,6 +259,8 @@ int main(int argc, char *argv[]) {
 
     //-------------------------Execution of Timer--------------------------------
     if(strcmp(argv[1], "timer") == 0) {
+        //See Draw::timerLoop for full implementation of timer code
+
         switch(argc) {
             case(3): {
                 Timer::timerLoop(
