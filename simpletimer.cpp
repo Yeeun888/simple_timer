@@ -207,6 +207,28 @@ int main(int argc, char *argv[]) {
     //timer hh mm ss -> overloadable with multiple configurations
     //stopwatch -> simple count from 0 with 1 second precision. Maybe 0.1 s later on?
 
+    if(strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "help") == 0) {
+        std::cout << "Welcome to simpletimer. The available commands are:\n";
+        std::cout << "\n";
+
+        std::cout << "clock -> dsplays system clock\n";
+        std::cout << "\t Usage: simpletimer clock\n";
+        std::cout << "\n";
+
+        std::cout << "timer -> times according to hh mm ss\n";
+        std::cout << "\t Ex: 30 seconds\n";
+        std::cout << "\t    Usage: simpletimer timer 30\n";
+        std::cout << "\t Ex: 1 minute 20 seconds\n";
+        std::cout << "\t    Usage: simpletimer timer 1 20\n";
+        std::cout << "\t    Usage: simpletimer timer 80\n";
+        std::cout << "\t Ex: Display 1 hour and 1 second second\n";
+        std::cout << "\t    Usage: simpletimer timer 1 0 1\n";
+        std::cout << "\n";
+
+        std::cout << "clock -> dsplays system clock\n";
+        std::cout << "\t Usage: simpletimer clock\n";
+    }
+
     //-------------------------Execution of Clock--------------------------------
 
 
